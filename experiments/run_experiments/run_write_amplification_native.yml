@@ -1,0 +1,22 @@
+# Run experiments configurations
+# For each configuration: 
+# library_version:      code version to store the results in respective folder
+# library_path:         path where the pmdk/anchor libraries are located
+# benchmark_program:    name of the bencmark program to run (e.g. pmembench)
+# benchmark_path:       path where the executable and configurations are located
+# result_path:          path where the results should be stored
+# benchmark_configs:    microbenchmark configuration
+- cfg:
+    library_version: anchor_encr
+    library_path: anchor_build_path/anchor_encr_stats_write_ampl/lib
+    benchmark_program: extra_writes
+    benchmark_path: anchor_path/src/anchor/microbenchmarks
+    result_path: anchor_path/results
+    benchmark_configs:
+      extra_writes:
+        - 50 1
+        - 50 2
+        - 50 4
+        - 100 1
+        - 100 2
+        - 100 4

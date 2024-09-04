@@ -1,0 +1,37 @@
+- results:
+    folder: ./results
+    lib_versions:
+      pmdk:
+        - pmembench_alloc_update_free
+      #anchor_no_encr:
+      #  - anchor_pmembench_alloc_update_free
+      anchor_encr:
+        - anchor_pmembench_alloc_update_free
+      #anchor_no_encr_scone:
+      #  - anchor_pmembench_alloc_update_free
+      anchor_encr_scone:
+        - anchor_pmembench_alloc_update_free
+
+- plot:
+    plot_type: bar_tx_op
+    benchmarks:
+      - put
+      - update
+      - delete
+    y_axis: throughput
+    x_axis: data-size
+    variants: 
+      - total-ops
+    plot_folder:  ./plots
+
+- plot:
+    plot_type: bar_tx_op_overhead
+    benchmarks:
+      - put
+      - update
+      - delete
+    y_axis: throughput
+    x_axis: data-size
+    variants: 
+      - total-ops
+    plot_folder:  ./plots

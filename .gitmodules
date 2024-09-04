@@ -1,0 +1,9 @@
+[submodule "anchor-eRPC"]
+	path = anchor-eRPC
+	url = git@github.com:dgiantsidi/anchor-eRPC.git
+[submodule "pmdk"]
+	path = pmdk
+	url = https://github.com/dimstav23/pmdk.git
+[submodule "network-stack"]
+	path = network-stack
+	url = https://github.com/saendigPhilip/network-stack.git

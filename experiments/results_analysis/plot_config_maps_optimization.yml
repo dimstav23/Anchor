@@ -1,0 +1,15 @@
+- results:
+    folder: ./results
+    lib_versions:
+      anchor_encr_scone:
+        - anchor_pmembench_map_non_opt
+
+- plot:
+    plot_type: bar_opt
+    benchmarks:
+      - map_custom
+    y_axis: throughput
+    x_axis: read-ratio
+    variants: 
+      - type
+    plot_folder: ./plots

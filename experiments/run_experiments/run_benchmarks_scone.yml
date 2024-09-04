@@ -1,0 +1,32 @@
+# Run experiments configurations
+# For each configuration: 
+# library_version:      code version to store the results in respective folder
+# library_path:         path where the pmdk/anchor libraries are located
+# benchmark_program:    name of the bencmark program to run (e.g. pmembench)
+# benchmark_path:       path where the executable and configurations are located
+# result_path:          path where the results should be stored
+# benchmark_configs:    name of the config files to run (without the .cfg ending)
+- cfg:
+    library_version: anchor_no_encr_scone
+    library_path: anchor_build_path/anchor_no_encr_scone/lib
+    benchmark_program: pmembench
+    benchmark_path: anchor_path/src/benchmarks
+    result_path: anchor_path/experiments/results
+    benchmark_configs:
+      - KV_operations_ds
+      - KV_operations_th
+      - anchor_pmembench_alloc_update_free
+      - anchor_pmembench_map
+    
+- cfg:
+    library_version: anchor_encr_scone
+    library_path: anchor_build_path/anchor_encr_scone/lib
+    benchmark_program: pmembench
+    benchmark_path: anchor_path/src/benchmarks
+    result_path: anchor_path/experiments/results
+    benchmark_configs:
+      - KV_operations_ds
+      - KV_operations_th
+      - anchor_pmembench_alloc_update_free
+      - anchor_pmembench_map
+      - anchor_pmembench_map_optimization

@@ -1,0 +1,90 @@
+# scone image tag used: scone-run-ubuntu-18.04 & scone-run-ubuntu-18.04-scone4.2.1
+# For donna:
+#FROM scone-ubuntu_18:latest 
+# For amy:
+FROM scone-ubuntu_18-anchor-pmdk:latest
+ARG DEBIAN_FRONTEND=noninteractive
+ARG ssh_key
+
+# Do not even thing to perform upgrade!
+RUN apt-get update \
+    && apt-get -y install automake autoconf asciidoc asciidoctor \ 
+    && apt-get -y install bash-completion xmlto libtool pkg-config \
+    && apt-get -y install libglib2.0-0 libglib2.0-dev libfabric1 \
+    && apt-get -y install graphviz pandoc libncurses5 libkmod2 \
+    && apt-get -y install libkmod-dev libudev-dev uuid-dev libjson-c-dev \
+    && apt-get -y install libkeyutils-dev systemd doxygen libunwind-dev \
+    && apt-get -y install git libfabric-dev libnuma-dev ssh \
+    && apt-get -y install libboost1.65-dev libibverbs-dev
+
+# ndctl
+RUN mkdir /downloads
+RUN chmod +w /downloads
+WORKDIR /downloads
+RUN git clone https://github.com/pmem/ndctl
+WORKDIR /downloads/ndctl
+RUN git checkout ea014c0c9ec8d0ef945d072dcc52b306c7a686f9
+RUN ./autogen.sh
+RUN ./configure CFLAGS='-g -O2' --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib
+RUN make -j$(nproc)
+RUN make install -j$(nproc)
+
+# openssl
+WORKDIR /downloads
+RUN git clone https://github.com/openssl/openssl.git
+WORKDIR /downloads/openssl
+RUN git checkout ae031148fde2b55238d56dcbe4ac05625382d970
+RUN ./Configure
+RUN make -j$(nproc)
+RUN make install -j$(nproc)
+
+# geprftools
+WORKDIR /downloads
+RUN git clone https://github.com/dimstav23/gperftools.git
+WORKDIR /downloads/gperftools
+RUN mkdir build
+RUN ./autogen.sh
+RUN ./configure --prefix=/downloads/gperftools/build
+RUN make -j$(nproc)
+RUN make install -j
+
+# Anchor
+####################################################
+# SHOULD BE REMOVED AFTER BECOMING PUBLIC #
+# add credentials for github
+RUN mkdir /root/.ssh/
+RUN echo "${ssh_key}" > /root/.ssh/id_rsa
+RUN chmod 600 /root/.ssh/id_rsa
+# make sure your domain is accepted
+RUN touch /root/.ssh/known_hosts
+RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
+####################################################
+
+WORKDIR /home
+RUN git clone git@github.com:dimstav23/Anchor.git
+WORKDIR /home/Anchor
+RUN git checkout dev-1.8-based-general_caching_optimization
+RUN git submodule update --init
+#RUN ./setup_and_run.sh -e scone -b microbenchmarks -a /usr/lib/x86_64-linux-gnu/
+#RUN ./setup_and_run.sh -e scone -b benchmarks -a /usr/lib/x86_64-linux-gnu/
+
+# Env variables
+ENV PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig \
+    PMEM_IS_PMEM_FORCE=1 \
+    PMEMOBJ_LOG_LEVEL=0 \
+    PMEM_LOG_LEVEL=0 \
+# for non-debug versions
+    LD_LIBRARY_PATH=/usr/local/lib/:/downloads/gperftools/build/lib/ \
+    GPERF_PATH=/downloads/gperftools/build/
+
+# scone
+ENV SCONE_VERSION=1 \
+    SCONE_LOG=7 \
+    SCONE_NO_FS_SHIELD=1 \
+    SCONE_NO_MMAP_ACCESS=1 \
+    SCONE_HEAP=2G \
+    SCONE_LD_DEBUG=1 
+
+ENV PRELOAD_ANCHOR_LIBS_LIST="libanchor.so libpmem.so.1 libpmemobj.so.1 libpmemlog.so.1 libpmemblk.so.1 libpmempool.so.1 librpmem.so.1" \
+    PRELOAD_GPERF_LIB_PATH="/downloads/gperftools/build/lib/" \
+    PRELOAD_GPERF_LIB="libprofiler.so.0"

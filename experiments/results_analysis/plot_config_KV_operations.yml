@@ -1,0 +1,20 @@
+- results:
+    folder: ./results
+    lib_versions:
+      anchor_encr:
+        - KV_operations_th
+      anchor_encr_scone:
+        - KV_operations_th
+
+- plot:
+    plot_type: line_th
+    benchmarks:
+      - get_put_70_30_th
+      - get_put_90_10_th
+      - get_put_0_100_th
+    y_axis: throughput
+    x_axis: threads
+    variants: 
+      - total-ops
+      - data-size
+    plot_folder: ./plots

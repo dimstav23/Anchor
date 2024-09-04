@@ -1,0 +1,25 @@
+- results:
+    folder: ./results
+    lib_versions:
+      pmdk:
+        - pmembench_map
+      anchor_no_encr:
+        - anchor_pmembench_map
+      anchor_encr:
+        - anchor_pmembench_map     
+      anchor_no_encr_scone:
+        - anchor_pmembench_map
+      anchor_encr_scone:
+        - anchor_pmembench_map
+
+- plot:
+    plot_type: bar_overhead_custom
+    benchmarks:
+      - map_custom
+    y_axis: throughput
+    x_axis: type
+    variants: 
+      - total-ops
+      - read-ratio
+      - keys
+    plot_folder: ./plots

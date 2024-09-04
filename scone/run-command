@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+set -x
+
+flags=(
+   --name anchor_sigmod
+   --device=/dev/isgx:/dev/isgx
+   --device=/dev/hugepages
+   -ti
+   --privileged=true
+   -v "/dev/hugepages":"/dev/hugepages"
+   # modify the path to Anchor accordingly for your own sconeWorkspace mapping
+   -v "/path/to/Anchor/":"/home/sconeWorkspace"
+   -v "$PWD/results":"/results"
+   -v "/dev/shm":"/dev/shm"
+   -v "/tmp":"/tmp"
+   -v "/sys/bus/pci/drivers":"/sys/bus/pci/drivers"
+   -v /sys/devices/system/node:/sys/devices/system/node
+   -v /dev:/dev
+   -v "/sys/kernel/mm/hugepages":"/sys/kernel/mm/hugepages"
+   -v "/sys/bus/pci/devices":"/sys/bus/pci/devices"
+   --ipc=host
+   --net=host
+   #scone-ubuntu_18:latest
+   anchor_sigmod:latest
+)
+
+if [ $( docker ps -a | grep anchor_sigmod | wc -l ) -gt 0 ]; then
+  #echo "anchor_sigmod container exists"
+  docker container "start" anchor_sigmod
+  docker "exec" -ti --privileged anchor_sigmod $@
+else
+  docker run "${flags[@]}" $@
+fi
+

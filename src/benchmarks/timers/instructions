@@ -1,0 +1,13 @@
+you take a timestamp by calling
+get_tsc()
+and you can convert it into "real time" with
+get_time_in_ms or get_time_in_s
+take_time and take_time_diff are wrapper functions, which give you the time of one method call, so you can give it a method and the arguments it should be called with and it returns the time it took to execute the methods and the return value of the method
+
+if you need other units for time you can easily add another function call by i.e.
+//rdtsc.h
+uint64_t get_time_in_us(size_t tsc_value);
+//rdtsc.cpp
+uint64_t get_time_in_us(size_t tsc_value) {
+  return get_time_<uint64_t, 1'000'000, 1>(tsc_value);
+}

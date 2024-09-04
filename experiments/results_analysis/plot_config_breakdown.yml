@@ -1,0 +1,19 @@
+- results:
+    folder: ./results
+    lib_versions:
+      pmdk:
+        - map_breakdown
+      anchor_no_encr:
+        - anchor_pmembench_map_breakdown
+      anchor_encr:
+        - anchor_pmembench_map_breakdown
+
+- plot:
+    plot_type: breakdown_bar
+    benchmarks:
+      - map_custom
+    y_axis: throughput
+    x_axis: type
+    variants:
+      - read-ratio
+    plot_folder: ./plots
