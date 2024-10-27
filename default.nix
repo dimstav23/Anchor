@@ -1,4 +1,4 @@
-with import <nixpkgs> {};
+with import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/3c52ea8c9216a0d5b7a7b4d74a9d2e858b06df5c.tar.gz") {};
 let
   localPkgs = callPackages ./nix {};
   kernel = linuxPackages_4_14.kernel;
@@ -12,6 +12,8 @@ in gcc8Stdenv.mkDerivation {
     cmake
     libtool
     pkg-config
+    udev
+    kmod
   ];
   buildInputs = [
     python3Packages.numpy

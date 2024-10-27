@@ -31,6 +31,4 @@ tags
 /build/
 /plots/
 /results/
-!anchor_network
-anchor_*
 nix/result*

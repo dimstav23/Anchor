@@ -1,0 +1,13 @@
+diff --git a/client_server_twosided/src/client_server_common.h b/client_server_twosided/src/client_server_common.h
+index 36b3523..09eb494 100644
+--- a/client_server_twosided/src/client_server_common.h
++++ b/client_server_twosided/src/client_server_common.h
+@@ -30,7 +30,7 @@ using namespace std;
+ 
+ static constexpr uint8_t DEFAULT_REQ_TYPE = 2;
+ 
+-static constexpr size_t MAX_PENDING_REQUESTS = 1024;
++static constexpr size_t MAX_PENDING_REQUESTS = 16;//1024;
+ 
+ static constexpr uint8_t RDMA_GET = 0b00;
+ static constexpr uint8_t RDMA_PUT = 0b01;
